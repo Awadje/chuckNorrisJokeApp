@@ -27,7 +27,7 @@
                 <v-list-tile-title>{{ joke.joke }}</v-list-tile-title>
               </v-list-tile>
             </v-list-tile-content>
-            <v-btn @click="getJokes">Get Random Jokes</v-btn>
+            <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
           </v-card>
         </v-flex>
       </v-container>
@@ -40,7 +40,7 @@
               <v-toolbar-title>Favorites</v-toolbar-title>
             </v-toolbar>
             <v-list-tile-content>
-              <v-btn @click="jokeTimer">Random Joke Timer</v-btn>
+              <v-btn dark color="green" @click="jokeTimer">Random Joke Timer</v-btn>
               <v-btn v-if="timerOn" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
               <v-list-tile
                 v-for="(favorite, index) in favorites"
