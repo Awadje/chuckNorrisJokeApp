@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar>
-      <v-toolbar-title>Chuck Norris Joke Generator</v-toolbar-title>
+      <v-toolbar-title>Chuck Norris Joke Generator App</v-toolbar-title>
     </v-toolbar>
     <v-alert v-show="alert" outline color="error" icon="warning" :value="true" dismissible v-model="alert">
       {{ error }}
@@ -22,7 +22,7 @@
                 >
                 <v-list-tile-avatar>
                   <v-icon v-if="!favoriteIcon(joke)" @click="addToFavorites(joke)">star_outline</v-icon>
-                  <v-icon v-if="favoriteIcon(joke)" @click="addToFavorites(joke)">star</v-icon>
+                  <v-icon color="yellow" v-if="favoriteIcon(joke)" @click="addToFavorites(joke)">star</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-title>{{ joke.joke }}</v-list-tile-title>
               </v-list-tile>
@@ -48,7 +48,7 @@
                 avatar
                 >
                 <v-list-tile-avatar>
-                  <v-icon @click="removeFromFavorites(index)">star</v-icon>
+                  <v-icon color="error" @click="removeFromFavorites(index)">cancel</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-title>{{ favorite.joke }}</v-list-tile-title>
               </v-list-tile>
@@ -75,24 +75,34 @@ import axios from 'axios'
         jokeInterval: ''
       }
     },
+    watch: {
+      favorites: {
+        handler() {
+          localStorage.setItem('favorites', JSON.stringify(this.favorites));
+        },
+      deep: true,
+      }
+    },
+    mounted() {
+      if (localStorage.getItem('favorites')) 
+      this.favorites = JSON.parse(localStorage.getItem('favorites'))
+    },
     methods: {
-      getJokes(number) {
+      getJokes() {
         axios.get(`http://api.icndb.com/jokes/random/11`)
         .then(response => {
           this.jokes = response.data
-          console.log(this.jokes)
         })
         .catch(e => {
-          alert = true
+          this.alert = true
           this.error = e
         })
       },
       getJokesRandom() {
         axios.get(`http://api.icndb.com/jokes/random/1`)
         .then(response => {
-          this.favorites.push(response.data.value[0])
           if(this.favorites.length < 11) {
-            this.favorites.push(joke)
+            this.favorites.push(response.data.value[0])
           } else {
             this.stopJokeTimer()
             this.alert = true
@@ -100,7 +110,7 @@ import axios from 'axios'
           }
         })
         .catch(e => {
-          alert = true
+          this.alert = true
           this.error = e
         })
       },
