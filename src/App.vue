@@ -40,7 +40,7 @@
               <v-toolbar-title>Favorites</v-toolbar-title>
             </v-toolbar>
             <v-list-tile-content>
-              <v-btn dark color="green" @click="jokeTimer">Random Joke Timer</v-btn>
+              <v-btn v-if="!timerOn" dark color="green" @click="jokeTimer">Random Joke Timer</v-btn>
               <v-btn v-if="timerOn" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
               <v-list-tile
                 v-for="(favorite, index) in favorites"
