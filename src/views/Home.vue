@@ -5,10 +5,10 @@
         <v-layout justify-center align-center>
           <v-flex xs12 sm8 md4>
             <v-card raised class="elevation-24">
+              <v-alert icon="warning" :value="error" outline dismissible>{{error}}</v-alert>
               <div class="title-style text-md-center">Welcome</div>
               <div><img class="logo-style" src="../assets/CN.jpg"></div>
               <v-card-text>
-                <v-alert icon="warning" :value="error.status" outline dismissible>{{error.message}}</v-alert>
                 <v-form v-model="valid">
                   <v-text-field
                     v-model="email"
@@ -51,7 +51,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      error: '',
+      error: false,
       valid: true,
       errors: '',
       user: '',
@@ -104,9 +104,11 @@ export default {
     authenticate() {
       if(this.email === this.user.email && this.decryptPassword() === this.password) {
         localStorage.setItem('auth', JSON.stringify({ authenticated: true }))
+        this.error = ''
         this.$router.push({ path: 'base' })
       } else {
         localStorage.setItem('auth', JSON.stringify({ authenticated: false }))
+        this.error = 'Gebruikers naam en/of wachtwoord niet correct'
       }
     }
   },
@@ -114,7 +116,6 @@ export default {
     if (localStorage.getItem('user')) 
     this.getUser()
     this.checkSession()
-    console.log(process.env.VUE_APP_SECRET)
   }
 }
 </script>

@@ -117,7 +117,7 @@ import axios from 'axios'
         return this.favorites.map(i => i.id).includes(joke.id)
       },
       addToFavorites(joke) {
-        if(matchingJoke(joke)){
+        if(this.matchingJoke(joke)){
           this.alert = true
           this.error = "This joke is already in your favorites"
         } else {
