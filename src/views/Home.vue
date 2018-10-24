@@ -62,8 +62,8 @@ export default {
       passwordRules: [
         v => /^.*/.test(v) || 'Veld mag niet leeg zijn',
         v => /(?=.*[a-z]$)/.test(v) || 'Alleen kleine letters',
-        v => /^((?!i).)*$/.test(v) || 'Geen i',
-        v => /^((?!l).)*$/.test(v) || 'Geen l',
+        v => /^((?!i).)*$/.test(v) || 'Mag geen klene letter "i" bevatten',
+        v => /^((?!l).)*$/.test(v) || 'Mag geen klene letter "l" bevatten',
         v => /^(?=.{1,32}$).*/.test(v) || 'Max 32 karakters',
         v => /(?=(.)\1+)/.test(v) || 'Moet een set van twee letters bevatten',
         // v => /^([a-z]){3}[a-z]*$/i.test(v) || 'Moet een set van 3 opvolgende letters bevatten',
