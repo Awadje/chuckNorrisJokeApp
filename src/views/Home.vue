@@ -33,8 +33,8 @@
             </v-form>
           </v-card-text>
             <v-card-actions>
-              <v-btn v-if="!session" @click="saveLoginData()" class="loginbutton" color="primary">Sign Up</v-btn>
-              <v-btn v-if="session" @click="authenticate()" class="loginbutton" color="primary">Login</v-btn>
+              <v-btn v-if="!session" @click="signUp" class="loginbutton" color="primary">Sign Up</v-btn>
+              <v-btn v-if="session" @click="authenticate" class="loginbutton" color="primary">Login</v-btn>
             </v-card-actions>
         </v-card>
       </v-flex>
@@ -82,7 +82,7 @@ export default {
   computed: {
   },
   methods: {
-    saveLoginData () {
+    signUp() {
       localStorage.setItem('user', JSON.stringify({password: CryptoJS.AES.encrypt(JSON.stringify(this.password), '123').toString(), email: this.email, active: true}))
       localStorage.setItem('auth', JSON.stringify({ authenticated: true }))
       router.push({ path: 'base' })
