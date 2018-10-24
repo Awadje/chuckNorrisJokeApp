@@ -3,7 +3,10 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
+import dotenv from 'dotenv'
 
+
+dotenv.config()
 
 Vue.config.productionTip = false
 
@@ -18,7 +21,6 @@ router.beforeEach((to, from, next) => {
         query: { redirect: to.fullPath }
       })
     } else {
-      console.info('Allowed')
       next()
     }
 } else {

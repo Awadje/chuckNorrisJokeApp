@@ -21,8 +21,8 @@
                 avatar
                 >
                 <v-list-tile-avatar>
-                  <v-icon v-if="!favoriteIcon(joke)" @click="addToFavorites(joke)">star_outline</v-icon>
-                  <v-icon color="yellow" v-if="favoriteIcon(joke)" @click="addToFavorites(joke)">star</v-icon>
+                  <v-icon v-if="!matchingJoke(joke)" @click="addToFavorites(joke)">star_outline</v-icon>
+                  <v-icon color="yellow" v-if="matchingJoke(joke)" @click="addToFavorites(joke)">star</v-icon>
                 </v-list-tile-avatar>
                 <v-list-tile-title>{{ joke.joke }}</v-list-tile-title>
               </v-list-tile>
@@ -113,11 +113,11 @@ import axios from 'axios'
           this.error = e
         })
       },
-      favoriteIcon(joke) {
+      matchingJoke(joke) {
         return this.favorites.map(i => i.id).includes(joke.id)
       },
       addToFavorites(joke) {
-        if(this.favorites.map(i => i.id).includes(joke.id)){
+        if(matchingJoke(joke)){
           this.alert = true
           this.error = "This joke is already in your favorites"
         } else {
