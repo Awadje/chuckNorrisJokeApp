@@ -2,8 +2,6 @@
   "name": "cnjokes",
   "version": "0.1.0",
   "private": true,
-  "wst": "/dist/",
-  "homepage": "git@github.com:Awadje/awadje.github.io",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -13,9 +11,13 @@
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/polyfill": "^7.0.0-rc.1",
+    "aws-sdk": "^2.341.0",
     "axios": "^0.18.0",
+    "bcrypt": "^3.0.2",
+    "crypto-js": "^3.1.9-1",
     "papaparse": "^4.6.1",
     "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
     "vuetify": "^1.2.0"
   },
   "devDependencies": {
@@ -49,5 +51,7 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 10"
-  ]
+  ],
+  "homepage": "git@github.com:Awadje/awadje.github.io",
+  "wst": "/dist/"
 }
