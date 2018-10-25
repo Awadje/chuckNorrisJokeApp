@@ -4,6 +4,9 @@
 ```
 npm install
 ```
+```
+create local config file in root named: .env.local containing VUE_APP_SECRET=yourSecret
+```
 
 ### Compiles and hot-reloads for development
 ```
