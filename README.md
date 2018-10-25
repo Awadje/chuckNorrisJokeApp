@@ -1,8 +1,10 @@
 # Vue Chuck Norris Joke App
 
-### Screenshots
+### Screenshot Login
 
 ![Screenshot:](https://res.cloudinary.com/dnbyfobad/image/upload/v1540453385/screenshot2_yzvfvq.png)
+
+### Screenshot App
 ![Screenshot:](https://res.cloudinary.com/dnbyfobad/image/upload/v1540453384/screenshot1_mj0rzl.png)
 
 ## Project setup
