@@ -70,16 +70,6 @@ export default {
       ]
     }
   },
-  watch: {
-    user: {
-      handler() {
-        localStorage.getItem('user', JSON.stringify(this.user));
-      },
-    deep: true,
-    }
-  },
-  computed: {
-  },
   methods: {
     signUp() {
       localStorage.setItem('user', JSON.stringify({password: CryptoJS.AES.encrypt(JSON.stringify(this.password), process.env.VUE_APP_SECRET).toString(), email: this.email, active: true}))
