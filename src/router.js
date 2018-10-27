@@ -18,6 +18,7 @@ export default new Router({
       path: '/',
       name: 'root',
       component: App,
+      redirect: { name: 'base' },
       meta: { requiresAuth: true }
     },
     {
