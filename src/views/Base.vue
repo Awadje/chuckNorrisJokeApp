@@ -120,10 +120,13 @@ import axios from 'axios'
         if(this.matchingJoke(joke)){
           this.alert = true
           this.error = "This joke is already in your favorites"
-        } else {
+        } else if (this.favorites.length < 11) {
           this.favorites.push(joke)
           this.alert = false  
           this.error = ''
+        } else {
+          this.alert = true
+          this.error = "Maximum Favorites reached"
         }
       },
       removeFromFavorites(index) {
