@@ -61,7 +61,7 @@ export default {
       session: '',
       passwordRules: [
         v => /^.*/.test(v) || 'Veld mag niet leeg zijn',
-        v => /(?=.*[a-z]$)/.test(v) || 'Alleen kleine letters',
+        v => /^((?![A-Z]).)*$/.test(v) || 'Alleen kleine letters',
         v => /^((?!i).)*$/.test(v) || 'Mag geen klene letter "i" bevatten',
         v => /^((?!l).)*$/.test(v) || 'Mag geen klene letter "l" bevatten',
         v => /^(?=.{1,32}$).*/.test(v) || 'Max 32 karakters',
