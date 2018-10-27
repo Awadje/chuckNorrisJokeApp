@@ -131,7 +131,7 @@ import axios from 'axios'
       },
       jokeTimer() {
         this.timerOn = true
-        this.jokeInterval = setInterval(() => this.getJokesRandom(1), 5000)
+        this.jokeInterval = setInterval(() => this.getJokesRandom(), 5000)
       },
       stopJokeTimer() {
         this.timerOn = false
