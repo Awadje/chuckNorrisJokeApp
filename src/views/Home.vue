@@ -118,12 +118,10 @@ export default {
   margin: auto;
   padding-top: 87px;
   padding-bottom: 37px;
-  font-family: Montserrat;
 }
 .loginbutton {
   float: right;
   max-width: 80%;
-  font-family: Montserrat, light;
   font-weight: bold;
   margin-top: 38px;
   margin-bottom: 20px;
