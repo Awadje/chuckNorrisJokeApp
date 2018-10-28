@@ -66,12 +66,11 @@ import axios from 'axios'
     data () {
       return {
         error: false,
-        parseError: '',
         alert: false,
         jokes: [],
         favorites: [],
         timerOn: false,
-        jokeInterval: ''
+        jokeInterval: null
       }
     },
     watch: {
@@ -100,7 +99,7 @@ import axios from 'axios'
       getJokesRandom() {
         axios.get(`http://api.icndb.com/jokes/random/1`)
         .then(response => {
-          if(this.favorites.length < 11) {
+          if(this.favorites.length < 10) {
             this.favorites.push(response.data.value[0])
           } else {
             this.stopJokeTimer()
@@ -120,7 +119,7 @@ import axios from 'axios'
         if(this.matchingJoke(joke)){
           this.alert = true
           this.error = "This joke is already in your favorites"
-        } else if (this.favorites.length < 11) {
+        } else if (this.favorites.length < 10) {
           this.favorites.push(joke)
           this.alert = false  
           this.error = ''
