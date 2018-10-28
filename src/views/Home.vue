@@ -54,11 +54,11 @@ export default {
       error: false,
       valid: true,
       errors: '',
-      user: '',
+      user: {},
       email: '',
       password: '',
       isPasswordInvisible: true,
-      session: '',
+      session: null,
       passwordRules: [
         v => /^.*/.test(v) || 'Veld mag niet leeg zijn',
         v => /^((?![A-Z]).)*$/.test(v) || 'Alleen kleine letters',
@@ -89,7 +89,7 @@ export default {
       return decryptedData
     },
     getUser () {
-       this.user = JSON.parse(localStorage.getItem('user'))
+      this.user = JSON.parse(localStorage.getItem('user'))
     },
     authenticate() {
       if(this.email === this.user.email && this.decryptPassword() === this.password) {
