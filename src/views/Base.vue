@@ -102,7 +102,6 @@ import axios from 'axios'
           if(this.favorites.length < 10) {
             this.favorites.push(response.data.value[0])
           } else {
-            this.stopJokeTimer()
             this.alert = true
             this.error = "Maximum Favorites reached"
           }
@@ -133,7 +132,13 @@ import axios from 'axios'
       },
       jokeTimer() {
         this.timerOn = true
-        this.jokeInterval = setInterval(() => this.getJokesRandom(), 5000)
+        this.jokeInterval = setInterval(() => {
+          if (this.favorites.length > 10) {
+            clearInterval(this.jokeInterval)
+          } else {
+            this.getJokesRandom()
+          }
+        }, 5000)
       },
       stopJokeTimer() {
         this.timerOn = false
