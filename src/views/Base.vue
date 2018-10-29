@@ -97,7 +97,6 @@ import axios from 'axios'
       },
       getJokesRandom() {
         if(this.favorites.length < 10) {
-          this.timerOn = true
           axios.get(`http://api.icndb.com/jokes/random/1`)
           .then(response => {
             this.jokeInterval = setInterval(() => {
