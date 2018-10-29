@@ -40,8 +40,8 @@
               <v-toolbar-title>Favorites</v-toolbar-title>
             </v-toolbar>
             <v-list-tile-content>
-              <v-btn v-if="!timerOn" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
-              <v-btn v-if="timerOn" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
+              <v-btn v-if="jokeInterval === null" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
+              <v-btn v-if="jokeInterval !== null" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
               <v-list-tile
                 v-for="(favorite, index) in favorites"
                 :key="favorite.id"
@@ -69,7 +69,6 @@ import axios from 'axios'
         alert: false,
         jokes: [],
         favorites: [],
-        timerOn: false,
         jokeInterval: null
       }
     },
@@ -110,13 +109,13 @@ import axios from 'axios'
           })
           .catch(e => {
             clearInterval(this.jokeInterval)
-            this.timerOn = false
+            this.jokeInterval = null
             this.alert = true
             this.error = e
           })
         } else {
           this.alert = true
-          this.timerOn = false
+          this.jokeInterval = null
           this.error = "Maximum Favorites reached"
         }
       },
@@ -126,7 +125,7 @@ import axios from 'axios'
       addToFavorites(joke) {
         if(this.matchingJoke(joke)){
           clearInterval(this.jokeInterval)
-          this.timerOn = false
+          this.jokeInterval = null
           this.alert = true
           this.error = "This joke is already in your favorites"
         } else if (this.favorites.length < 10) {
@@ -142,7 +141,7 @@ import axios from 'axios'
         this.favorites.splice(index, 1)
       },
       stopJokeTimer() {
-        this.timerOn = false
+        this.jokeInterval = null
         clearInterval(this.jokeInterval)
       }
     }
