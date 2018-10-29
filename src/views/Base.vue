@@ -140,8 +140,8 @@ import axios from 'axios'
         this.favorites.splice(index, 1)
       },
       stopJokeTimer() {
-        this.jokeInterval = null
         clearInterval(this.jokeInterval)
+        this.jokeInterval = null
       }
     }
   }
