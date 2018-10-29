@@ -40,7 +40,7 @@
               <v-toolbar-title>Favorites</v-toolbar-title>
             </v-toolbar>
             <v-list-tile-content>
-              <v-btn v-if="!timerOn" dark color="green" @click="jokeTimer">Random Joke Timer</v-btn>
+              <v-btn v-if="!timerOn" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
               <v-btn v-if="timerOn" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
               <v-list-tile
                 v-for="(favorite, index) in favorites"
@@ -97,25 +97,36 @@ import axios from 'axios'
         })
       },
       getJokesRandom() {
-        axios.get(`http://api.icndb.com/jokes/random/1`)
-        .then(response => {
-          if(this.favorites.length < 10) {
-            this.favorites.push(response.data.value[0])
-          } else {
+        if(this.favorites.length < 10) {
+          this.timerOn = true
+          axios.get(`http://api.icndb.com/jokes/random/1`)
+          .then(response => {
+            this.jokeInterval = setInterval(() => {
+              if (this.favorites.length > 10) {
+                clearInterval(this.jokeInterval)
+              } else {
+                this.addToFavorites(response.data.value[0])
+              }}, 5000)
+          })
+          .catch(e => {
+            clearInterval(this.jokeInterval)
+            this.timerOn = false
             this.alert = true
-            this.error = "Maximum Favorites reached"
-          }
-        })
-        .catch(e => {
+            this.error = e
+          })
+        } else {
           this.alert = true
-          this.error = e
-        })
+          this.timerOn = false
+          this.error = "Maximum Favorites reached"
+        }
       },
       matchingJoke(joke) {
         return this.favorites.map(i => i.id).includes(joke.id)
       },
       addToFavorites(joke) {
         if(this.matchingJoke(joke)){
+          clearInterval(this.jokeInterval)
+          this.timerOn = false
           this.alert = true
           this.error = "This joke is already in your favorites"
         } else if (this.favorites.length < 10) {
@@ -129,16 +140,6 @@ import axios from 'axios'
       },
       removeFromFavorites(index) {
         this.favorites.splice(index, 1)
-      },
-      jokeTimer() {
-        this.timerOn = true
-        this.jokeInterval = setInterval(() => {
-          if (this.favorites.length > 10) {
-            clearInterval(this.jokeInterval)
-          } else {
-            this.getJokesRandom()
-          }
-        }, 5000)
       },
       stopJokeTimer() {
         this.timerOn = false
