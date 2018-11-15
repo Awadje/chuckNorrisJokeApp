@@ -8,28 +8,13 @@
     </v-alert>
     <v-responsive>
       <v-container>
-        <v-flex>
-          <v-card>
-            <v-toolbar color="light-blue" dark>
-                <v-toolbar-side-icon><v-icon>sentiment_very_satisfied</v-icon></v-toolbar-side-icon>
-                <v-toolbar-title>Random Jokes</v-toolbar-title>
-            </v-toolbar>
-            <v-list-tile-content>
-              <v-list-tile
-                v-for="joke in jokes.value"
-                :key="joke.id"
-                avatar
-                >
-                <v-list-tile-avatar>
-                  <v-icon v-if="!matchingJoke(joke)" @click="addToFavorites(joke)">star_outline</v-icon>
-                  <v-icon color="yellow" v-if="matchingJoke(joke)" @click="addToFavorites(joke)">star</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title>{{ joke.joke }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list-tile-content>
-            <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
-          </v-card>
-        </v-flex>
+        <app-random-jokes
+          :jokes="jokes"
+          :favorites="favorites"
+          @addFavorites="addToFavorites($event)"
+          >
+        </app-random-jokes>
+        <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
       </v-container>
 
       <v-container>
@@ -61,15 +46,21 @@
 </template>
 
 <script>
+import randomJokes from './randomJokes'
 import axios from 'axios'
+
   export default {
+    components: {
+      AppRandomJokes: randomJokes 
+    },
     data () {
       return {
         error: false,
         alert: false,
         jokes: [],
         favorites: [],
-        jokeInterval: null
+        jokeInterval: null,
+        args: []
       }
     },
     watch: {
@@ -85,6 +76,30 @@ import axios from 'axios'
       this.favorites = JSON.parse(localStorage.getItem('favorites'))
     },
     methods: {
+      change(args) {
+        this.args = args
+        console.log = args
+      },
+      matchingJoke(joke) {
+        return this.favorites.map(i => i.id).includes(joke.id)
+      },
+      addToFavorites(joke) {
+        console.log(joke)
+        if(this.matchingJoke(joke)){
+          clearInterval(this.jokeInterval)
+          this.jokeInterval = null
+          this.alert = true
+          this.error = "This joke is already in your favorites"
+        } else if (this.favorites.length < 10) {
+          this.favorites.push(joke)
+          this.alert = false
+          this.error = ''
+        } else {
+          this.alert = true
+          this.alert = false
+          this.error = "Maximum Favorites reached"
+        }
+      },
       getJokes() {
         axios.get(`http://api.icndb.com/jokes/random/11`)
         .then(response => {
@@ -115,24 +130,6 @@ import axios from 'axios'
         } else {
           this.alert = true
           this.jokeInterval = null
-          this.error = "Maximum Favorites reached"
-        }
-      },
-      matchingJoke(joke) {
-        return this.favorites.map(i => i.id).includes(joke.id)
-      },
-      addToFavorites(joke) {
-        if(this.matchingJoke(joke)){
-          clearInterval(this.jokeInterval)
-          this.jokeInterval = null
-          this.alert = true
-          this.error = "This joke is already in your favorites"
-        } else if (this.favorites.length < 10) {
-          this.favorites.push(joke)
-          this.alert = false  
-          this.error = ''
-        } else {
-          this.alert = true
           this.error = "Maximum Favorites reached"
         }
       },
