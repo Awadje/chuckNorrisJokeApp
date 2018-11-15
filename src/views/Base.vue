@@ -7,51 +7,35 @@
       {{ error }}
     </v-alert>
     <v-responsive>
-      <v-container>
-        <app-random-jokes
-          :jokes="jokes"
-          :favorites="favorites"
-          @addFavorites="addToFavorites($event)"
-          >
-        </app-random-jokes>
-        <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
-      </v-container>
+      <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
+      <v-btn v-if="jokeInterval === null" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
+      <v-btn v-if="jokeInterval !== null" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
 
-      <v-container>
-        <v-flex>
-          <v-card>
-            <v-toolbar color="light-blue" dark>
-              <v-toolbar-side-icon><v-icon>star</v-icon></v-toolbar-side-icon>
-              <v-toolbar-title>Favorites</v-toolbar-title>
-            </v-toolbar>
-            <v-list-tile-content>
-              <v-btn v-if="jokeInterval === null" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
-              <v-btn v-if="jokeInterval !== null" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
-              <v-list-tile
-                v-for="(favorite, index) in favorites"
-                :key="favorite.id"
-                avatar
-                >
-                <v-list-tile-avatar>
-                  <v-icon color="error" @click="removeFromFavorites(index)">cancel</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title>{{ favorite.joke }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list-tile-content>
-          </v-card>
-        </v-flex>
-      </v-container>
+      <app-random-jokes
+        :jokes="jokes"
+        :favorites="favorites"
+        @addFavorite="addToFavorites($event)"
+        >
+      </app-random-jokes>
+
+       <app-favorite-jokes
+        :favorites="favorites"
+        @removeFavorite="removeFromFavorites($event)"
+        >
+      </app-favorite-jokes>
     </v-responsive>
   </v-app>
 </template>
 
 <script>
 import randomJokes from './randomJokes'
+import favoriteJokes from './favoriteJokes'
 import axios from 'axios'
 
   export default {
     components: {
-      AppRandomJokes: randomJokes 
+      AppRandomJokes: randomJokes,
+      AppFavoriteJokes: favoriteJokes  
     },
     data () {
       return {
@@ -59,8 +43,7 @@ import axios from 'axios'
         alert: false,
         jokes: [],
         favorites: [],
-        jokeInterval: null,
-        args: []
+        jokeInterval: null
       }
     },
     watch: {
@@ -74,18 +57,11 @@ import axios from 'axios'
     mounted() {
       if (localStorage.getItem('favorites')) 
       this.favorites = JSON.parse(localStorage.getItem('favorites'))
+      this.getJokes()
     },
     methods: {
-      change(args) {
-        this.args = args
-        console.log = args
-      },
-      matchingJoke(joke) {
-        return this.favorites.map(i => i.id).includes(joke.id)
-      },
       addToFavorites(joke) {
-        console.log(joke)
-        if(this.matchingJoke(joke)){
+        if(this.favorites.map(i => i.id).includes(joke.id)){
           clearInterval(this.jokeInterval)
           this.jokeInterval = null
           this.alert = true
@@ -96,7 +72,6 @@ import axios from 'axios'
           this.error = ''
         } else {
           this.alert = true
-          this.alert = false
           this.error = "Maximum Favorites reached"
         }
       },
