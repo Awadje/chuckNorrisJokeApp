@@ -70,21 +70,6 @@ import axios from 'axios'
           this.error = e
         })
       },
-      addToFavorites(joke) {
-        if(this.favorites.map(i => i.id).includes(joke.id)){
-          clearInterval(this.jokeInterval)
-          this.jokeInterval = null
-          this.alert = true
-          this.error = "This joke is already in your favorites"
-        } else if (this.favorites.length < 10) {
-          this.favorites.push(joke)
-          this.alert = false
-          this.error = ''
-        } else {
-          this.alert = true
-          this.error = "Maximum Favorites reached"
-        }
-      },
       getJokesRandom() {
         if(this.favorites.length < 10) {
           axios.get(`http://api.icndb.com/jokes/random/1`)
@@ -105,6 +90,21 @@ import axios from 'axios'
         } else {
           this.alert = true
           this.jokeInterval = null
+          this.error = "Maximum Favorites reached"
+        }
+      },
+      addToFavorites(joke) {
+        if(this.favorites.map(i => i.id).includes(joke.id)){
+          clearInterval(this.jokeInterval)
+          this.jokeInterval = null
+          this.alert = true
+          this.error = "This joke is already in your favorites"
+        } else if (this.favorites.length < 10) {
+          this.favorites.push(joke)
+          this.alert = false
+          this.error = ''
+        } else {
+          this.alert = true
           this.error = "Maximum Favorites reached"
         }
       },
