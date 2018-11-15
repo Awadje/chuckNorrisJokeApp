@@ -33,8 +33,8 @@
                 </v-form>
               </v-card-text>
                 <v-card-actions>
-                  <v-btn :disabled="!valid" v-if="!session" @click="signUp" class="loginbutton" color="primary">Sign Up & Login</v-btn>
-                  <v-btn :disabled="!valid" v-if="session" @click="authenticate" class="loginbutton" color="primary">Login</v-btn>
+                  <v-btn :disabled="!valid" v-if="!session" @click="signUp" class="login-button" color="primary">Sign Up & Login</v-btn>
+                  <v-btn :disabled="!valid" v-if="session" @click="authenticate" class="login-button" color="primary">Login</v-btn>
                 </v-card-actions>
             </v-card>
           </v-flex>
@@ -119,7 +119,7 @@ export default {
   padding-top: 87px;
   padding-bottom: 37px;
 }
-.loginbutton {
+.login-button {
   float: right;
   max-width: 80%;
   font-weight: bold;

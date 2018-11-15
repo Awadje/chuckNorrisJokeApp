@@ -60,6 +60,16 @@ import axios from 'axios'
       this.getJokes()
     },
     methods: {
+      getJokes() {
+        axios.get(`http://api.icndb.com/jokes/random/11`)
+        .then(response => {
+          this.jokes = response.data
+        })
+        .catch(e => {
+          this.alert = true
+          this.error = e
+        })
+      },
       addToFavorites(joke) {
         if(this.favorites.map(i => i.id).includes(joke.id)){
           clearInterval(this.jokeInterval)
@@ -74,16 +84,6 @@ import axios from 'axios'
           this.alert = true
           this.error = "Maximum Favorites reached"
         }
-      },
-      getJokes() {
-        axios.get(`http://api.icndb.com/jokes/random/11`)
-        .then(response => {
-          this.jokes = response.data
-        })
-        .catch(e => {
-          this.alert = true
-          this.error = e
-        })
       },
       getJokesRandom() {
         if(this.favorites.length < 10) {
