@@ -7,62 +7,36 @@
       {{ error }}
     </v-alert>
     <v-responsive>
-      <v-container>
-        <v-flex>
-          <v-card>
-            <v-toolbar color="light-blue" dark>
-                <v-toolbar-side-icon><v-icon>sentiment_very_satisfied</v-icon></v-toolbar-side-icon>
-                <v-toolbar-title>Random Jokes</v-toolbar-title>
-            </v-toolbar>
-            <v-list-tile-content>
-              <v-list-tile
-                v-for="joke in jokes.value"
-                :key="joke.id"
-                avatar
-                >
-                <v-list-tile-avatar>
-                  <v-icon v-if="!matchingJoke(joke)" @click="addToFavorites(joke)">star_outline</v-icon>
-                  <v-icon color="yellow" v-if="matchingJoke(joke)" @click="addToFavorites(joke)">star</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title>{{ joke.joke }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list-tile-content>
-            <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
-          </v-card>
-        </v-flex>
-      </v-container>
+      <v-btn dark color="green" @click="getJokes">Get Random Jokes</v-btn>
+      <v-btn v-if="jokeInterval === null" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
+      <v-btn v-if="jokeInterval !== null" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
 
-      <v-container>
-        <v-flex>
-          <v-card>
-            <v-toolbar color="light-blue" dark>
-              <v-toolbar-side-icon><v-icon>star</v-icon></v-toolbar-side-icon>
-              <v-toolbar-title>Favorites</v-toolbar-title>
-            </v-toolbar>
-            <v-list-tile-content>
-              <v-btn v-if="jokeInterval === null" dark color="green" @click="getJokesRandom">Random Joke Timer</v-btn>
-              <v-btn v-if="jokeInterval !== null" @click="stopJokeTimer" color="error">Stop Random Joke Timer</v-btn>
-              <v-list-tile
-                v-for="(favorite, index) in favorites"
-                :key="favorite.id"
-                avatar
-                >
-                <v-list-tile-avatar>
-                  <v-icon color="error" @click="removeFromFavorites(index)">cancel</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-title>{{ favorite.joke }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list-tile-content>
-          </v-card>
-        </v-flex>
-      </v-container>
+      <app-random-jokes
+        :jokes="jokes"
+        :favorites="favorites"
+        @addFavorite="addToFavorites($event)"
+        >
+      </app-random-jokes>
+
+       <app-favorite-jokes
+        :favorites="favorites"
+        @removeFavorite="removeFromFavorites($event)"
+        >
+      </app-favorite-jokes>
     </v-responsive>
   </v-app>
 </template>
 
 <script>
+import randomJokes from './randomJokes'
+import favoriteJokes from './favoriteJokes'
 import axios from 'axios'
+
   export default {
+    components: {
+      AppRandomJokes: randomJokes,
+      AppFavoriteJokes: favoriteJokes  
+    },
     data () {
       return {
         error: false,
@@ -83,6 +57,7 @@ import axios from 'axios'
     mounted() {
       if (localStorage.getItem('favorites')) 
       this.favorites = JSON.parse(localStorage.getItem('favorites'))
+      this.getJokes()
     },
     methods: {
       getJokes() {
@@ -118,18 +93,15 @@ import axios from 'axios'
           this.error = "Maximum Favorites reached"
         }
       },
-      matchingJoke(joke) {
-        return this.favorites.map(i => i.id).includes(joke.id)
-      },
       addToFavorites(joke) {
-        if(this.matchingJoke(joke)){
+        if(this.favorites.map(i => i.id).includes(joke.id)){
           clearInterval(this.jokeInterval)
           this.jokeInterval = null
           this.alert = true
           this.error = "This joke is already in your favorites"
         } else if (this.favorites.length < 10) {
           this.favorites.push(joke)
-          this.alert = false  
+          this.alert = false
           this.error = ''
         } else {
           this.alert = true
